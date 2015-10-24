@@ -5,9 +5,12 @@ var QuenLayer = {
     config: [{
         1: {
             question: 'who is this?',
-            answers: ['pharzan', 'a big bunny', 'you'],
-            correct: [1]
-
+            answers: [{
+                1: 'pharzan',
+                2: 'you',
+                3: 'Big Bunny'
+            }],
+            correct: 1
         }
     }],
 
