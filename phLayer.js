@@ -1,7 +1,7 @@
 /**
  * Created by Farzan on 10/23/2015.
  */
-var phLayer=function(){
+var phLayer = function () {
     //variable to store the player object
     this.playerObj = m.prop();
 
@@ -40,6 +40,15 @@ var phLayer=function(){
             this.state.playing = false;
             self.pause();
         }
+    };
+
+    this.pauseIt = function () {
+
+        var self = this.playerObj();
+
+        this.state.playing = false;
+        self.pause();
+
     };
 
     //function to seek in the file by setting the current time to
@@ -117,7 +126,7 @@ var phLayer=function(){
                     onended: self.loadFromPlayList,
                     ontimeupdate: function () {
                         self.state.time = self.playerObj().currentTime;
-                        PubSub.publish('timeChange',[self.state.time]);
+                        PubSub.publish('timeChange', [self.state.time]);
                     }
 
                 },
@@ -130,7 +139,7 @@ var phLayer=function(){
             )
         ];
 
-        videoView.push(m.component(overlayControls, self),m.component(QuenLayer, self));
+        videoView.push(m.component(overlayControls, self), m.component(QuenLayer, self));
 
         return [m('.videoContainer', {
 

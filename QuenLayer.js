@@ -2,8 +2,9 @@
  * Created by Farzan on 10/24/2015.
  */
 var QuenLayer = {
-    config: [{
-        1: {
+    parent: {},
+    config: {
+        2: {
             question: 'who is this?',
             answers: [{
                 1: 'pharzan',
@@ -11,17 +12,54 @@ var QuenLayer = {
                 3: 'Big Bunny'
             }],
             correct: 1
+        },
+        4: {
+            question: 'where is this?',
+            answers: [{
+                1: 'me',
+                2: '***',
+                3: 'Bunny'
+            }],
+            correct: 1
         }
-    }],
-    controller:function(){
+    },
+
+    question: m.prop(),
+    answers: [],
+
+    questionCheck: function (time, parent) {
+
+        var self = this,
+            t = Math.round(time);
+
+        if (self.config[t] && parent.state.playing != false && !self.config[t].seen) {
+            QuenLayer.parent.playIt();
+            self.question(self.config[t].question);
+            console.log(self.config[t].answers)
+            self.config[t].answers.map(function (ans, idx) {
+
+                self.answers[idx] = ans
+            });
+            console.log(self.answers[0]);
+            self.config[t].seen = true;
+            m.redraw()
+        }
+    },
+
+    controller: function (parent) {
         PubSub.subscribe('timeChange', function (time) {
-            console.log('current Time', time)
+            QuenLayer.questionCheck(time, parent)
         });
     },
+
     view: function (ctrl, parent) {
-
+        this.parent = parent;
         var self = this;
+        return m('div', self.question(), m('div',
+            self.answers.map(function (ans, idx) {
 
-        return m('div', 'hello')
+                console.log(ans)
+
+            })))
     }
 };
