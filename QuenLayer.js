@@ -13,7 +13,11 @@ var QuenLayer = {
             correct: 1
         }
     }],
-
+    controller:function(){
+        PubSub.subscribe('timeChange', function (time) {
+            console.log('current Time', time)
+        });
+    },
     view: function (ctrl, parent) {
 
         var self = this;

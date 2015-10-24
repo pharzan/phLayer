@@ -16,6 +16,7 @@ var phLayer=function(){
         loop: true
     };
 
+
     // states returned by the player
     this.state = {
         playing: false,
@@ -116,6 +117,7 @@ var phLayer=function(){
                     onended: self.loadFromPlayList,
                     ontimeupdate: function () {
                         self.state.time = self.playerObj().currentTime;
+                        PubSub.publish('timeChange',[self.state.time]);
                     }
 
                 },
