@@ -128,7 +128,7 @@ var phLayer=function(){
             )
         ];
 
-        videoView.push(m.component(overlayControls, self));
+        videoView.push(m.component(overlayControls, self),m.component(QuenLayer, self));
 
         return [m('.videoContainer', {
 
