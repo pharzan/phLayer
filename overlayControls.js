@@ -11,14 +11,25 @@ var overlayControls = {
 
         view: function (ctrl, parent) {
             var self = this;
-            console.log( parent.config.dimensions.w, parent.config.dimensions.h)
-            return m('.btns',
+            return m('.btns', {
+
+                    style:{
+                        height:"100%",
+                        width:"100%",
+                        position:"absolute",
+                        top:"0"
+
+                    },
+                    onclick: function () {
+                        parent.playIt()
+                    }
+                },
                 m("div.playBtn",
                     {
                         width: parent.config.dimensions.w,
                         height: parent.config.dimensions.h,
                         style: {
-                            position: "absolute",
+                            position:"relative",
                             left: "35%",
                             top: "20%",
                             color: "red",
@@ -28,13 +39,9 @@ var overlayControls = {
                             backgroundRepeat: "no-repeat",
                             display: parent.state.playing ? "none" : "block",
                             backgroundSize: "cover"
-                        },
-                        onclick: function () {
-                            parent.playIt();
                         }
                     }
                 )
             )
         }
-    }
-    ;
+    };
