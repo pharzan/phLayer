@@ -8,8 +8,9 @@ var phLayer=function(){
     // intial configurations
     this.config = {
         dimensions: {w: "400px", h: "225px"},
-        autoPlay: true,
+        autoPlay: false,
         playList: [
+            'file://C:/wamp/www/phLayer/assets/videos/trailer.mp4',
             'file://C:/wamp/www/phLayer/assets/videos/01.mp4'
         ],
         loop: true
@@ -72,14 +73,14 @@ var phLayer=function(){
 
     this.loadFromPlayList = function () {
 
-        var playeObj = this.playerObj();
+        var playerObj = this.playerObj();
         var config = this.config;
         var fileIdx = this.state.fileIdx;
         this.state.fileIdx++;
 
         if (config.playList[fileIdx]) {
-            playeObj.src = config.playList[fileIdx];
-            playeObj.load();
+            playerObj.src = config.playList[fileIdx];
+            playerObj.load();
 
         }
         else if (config.loop && fileIdx == config.playList.length) {
@@ -99,7 +100,7 @@ var phLayer=function(){
                     width: self.config.dimensions.w,
                     oncanplay: function () {
                         if (self.config.autoPlay) {
-                            self.state.duration = self.playerObj().duration
+                            self.state.duration = self.playerObj().duration;
                             self.playIt()
                         }
                     },
@@ -113,7 +114,7 @@ var phLayer=function(){
 
                     },
                     onended: self.loadFromPlayList,
-                    ontimeupdate: function (evt) {
+                    ontimeupdate: function () {
                         self.state.time = self.playerObj().currentTime;
                     }
 
@@ -127,6 +128,7 @@ var phLayer=function(){
             )
         ];
 
+        videoView.push(m.component(overlayControls, self));
 
         return [m('.videoContainer', {
 
