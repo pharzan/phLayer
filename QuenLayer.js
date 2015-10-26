@@ -7,9 +7,10 @@ var QuenLayer = {
         2: {
             question: 'who is this?',
             answers: [{
-                1: 'pharzan',
-                2: 'you',
-                3: 'Big Bunny'
+                0: 'pharzan',
+                1: 'you',
+                2: 'Big Bunny',
+                3: 'little Bunny'
             }],
             correct: 1
         },
@@ -25,7 +26,7 @@ var QuenLayer = {
     },
 
     question: m.prop(),
-    answers: m.prop(''),
+    answers: m.prop([]),
 
     questionCheck: function (time, parent) {
 
@@ -39,12 +40,8 @@ var QuenLayer = {
             console.log(self.config[t].answers);
             //iterate through the answers in the config object
             for (var ansNumber in self.config[t].answers[0]) {
-                console.log(ansNumber, self.config[t].answers[0][ansNumber])
-
-                self.answers(self.answers()+"<div id=" + ansNumber + ">" + self.config[t].answers[0][ansNumber]+"</div>")
-
+                self.answers().push(self.config[t].answers[0][ansNumber])
             }
-
 
             self.config[t].seen = true;
             m.redraw()
@@ -60,13 +57,15 @@ var QuenLayer = {
     view: function (ctrl, parent) {
         this.parent = parent;
         var self = this;
-        return m('div', self.question(), m('div', {
-                onclick: function () {
-                    var self=this
-                console.log(self)
-
-                }
-            }, m.trust(self.answers())
+        return m('div', self.question(), m('div', self.answers().map(function (answer, idx) {
+                return m('div', {
+                    answerId: idx,
+                    onclick: function () {
+                        var self = this;
+                        console.log(self.getAttribute('answerId'))
+                    }
+                }, answer)
+            })
         ))
     }
 };
