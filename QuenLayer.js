@@ -61,7 +61,8 @@ var QuenLayer = {
             this.question(question);
             question.seen = true;
             if (question.timeLimit) {
-                timerControl.startTimer(question.timeLimit,parent)
+                timerControl.start(question.timeLimit,parent)
+
             }
         }
 
@@ -88,10 +89,21 @@ var QuenLayer = {
         return parent.playIt();
     },
 
+    timeLimitReached:function(){
+        /*
+        Do something when the time limit has reached
+         */
+
+        console.log('time limit reached')
+    },
     controller: function (parent) {
         PubSub.subscribe('timeChange', function (time) {
             QuenLayer.getQuestion(time, parent)
         });
+        PubSub.subscribe('timeLimitReached', function (t) {
+            QuenLayer.timeLimitReached()
+        });
+
     },
 
     view: function (ctrl, parent) {
@@ -110,7 +122,8 @@ var QuenLayer = {
                     {
                         onclick: function () {
                             self.checkAnswer(key);
-                            self.clearContinue(parent)
+                            self.clearContinue(parent);
+                            timerControl.clear()
                         }
                     },
                     choices[key])

@@ -3,13 +3,13 @@
  */
 var timerControl = {
     ticker: {minutes: m.prop("00"), seconds: m.prop("00")},
-
-    startTimer: function (duration, parent) {
+    timerId:0,
+    start: function (duration) {
         var timer = duration, minutes, seconds;
         var self = this;
 
         var t = setInterval(function () {
-            m.startComputation();
+            self.timerId=t;
             minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
 
@@ -21,21 +21,27 @@ var timerControl = {
 
 
             if (--timer < 0) {
+                /*
+                 * Do something when the timer has ended
+                 * this also triggers timeLimitReached and
+                 * my be used to subscribe to a function from
+                 * anywhere.
+                 */
                 clearInterval(t);
-                console.log('finished');
                 self.ticker.minutes();
                 self.ticker.seconds();
-                /*
-                 * Do something when the timer has finished
-                 */
-                parent.playIt()
+                PubSub.publish('timeLimitReached');
+
             }
-            m.endComputation()
+            m.redraw()
         }, 1000)
 
 
     },
 
+    clear: function () {
+      clearInterval(this.timerId)
+    },
     controller: function () {
 
     },
