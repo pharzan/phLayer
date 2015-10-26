@@ -10,7 +10,6 @@ var overlayControls = {
         },
 
         view: function (ctrl, parent) {
-            var self = this;
             return m('.btns', {
 
                     style:{

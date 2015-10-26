@@ -20,7 +20,7 @@ var QuenLayer = {
                 4: 'little Bunny'
             },
             correct: 1,
-            timeLimit: 5000
+            timeLimit: 5
         },
         3: {
             text: 'where is this?',
@@ -29,7 +29,8 @@ var QuenLayer = {
                 2: '***',
                 3: 'Bunny'
             },
-            correct: 3
+            correct: 3,
+            timeLimit:10
         },
         6: {
             text: 'who are you?',
@@ -41,7 +42,9 @@ var QuenLayer = {
             correct: 0
         }
     },
-
+    state: {
+        waiting: false
+    },
     question: m.prop(),
 
     getQuestion: function (time, parent) {
@@ -52,11 +55,16 @@ var QuenLayer = {
         if (question && !question.seen) {
             if (parent.state.playing) {
                 parent.playIt();
+                this.state.waiting = true;
             }
 
             this.question(question);
             question.seen = true;
+            if (question.timeLimit) {
+                timerControl.startTimer(question.timeLimit,parent)
+            }
         }
+
     },
 
     checkAnswer: function (key) {
@@ -71,11 +79,12 @@ var QuenLayer = {
             console.log('wrong answer')
         }
 
-        return
+        return false
     },
 
     clearContinue: function (parent) {
         this.question('');
+        this.state.waiting = false;
         return parent.playIt();
     },
 
