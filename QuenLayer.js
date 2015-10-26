@@ -25,7 +25,7 @@ var QuenLayer = {
     },
 
     question: m.prop(),
-    answers: [],
+    answers: m.prop(''),
 
     questionCheck: function (time, parent) {
 
@@ -38,9 +38,10 @@ var QuenLayer = {
 
             console.log(self.config[t].answers);
             //iterate through the answers in the config object
-            for (var timeId in self.config[t].answers[0]) {
-                console.log(timeId,self.config[t].answers[0][timeId])
+            for (var ansNumber in self.config[t].answers[0]) {
+                console.log(ansNumber, self.config[t].answers[0][ansNumber])
 
+                self.answers(self.answers()+"<div id=" + ansNumber + ">" + self.config[t].answers[0][ansNumber]+"</div>")
 
             }
 
@@ -59,7 +60,13 @@ var QuenLayer = {
     view: function (ctrl, parent) {
         this.parent = parent;
         var self = this;
-        return m('div', self.question(), m('div', self.answers
+        return m('div', self.question(), m('div', {
+                onclick: function () {
+                    var self=this
+                console.log(self)
+
+                }
+            }, m.trust(self.answers())
         ))
     }
 };
