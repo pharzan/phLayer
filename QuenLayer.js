@@ -123,7 +123,7 @@ var QuenLayer = {
                         onclick: function () {
                             self.checkAnswer(key);
                             self.clearContinue(parent);
-                            timerControl.clear()
+                            timerControl.reset()
                         }
                     },
                     choices[key])

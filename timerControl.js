@@ -2,14 +2,16 @@
  * Created by Farzan on 10/26/2015.
  */
 var timerControl = {
+
     ticker: {minutes: m.prop("00"), seconds: m.prop("00")},
-    timerId:0,
+    interval:0,
+
     start: function (duration) {
         var timer = duration, minutes, seconds;
         var self = this;
 
-        var t = setInterval(function () {
-            self.timerId=t;
+        self.interval = setInterval(function () {
+
             minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
 
@@ -18,7 +20,6 @@ var timerControl = {
 
             self.ticker.minutes(minutes);
             self.ticker.seconds(seconds);
-
 
             if (--timer < 0) {
                 /*
@@ -31,25 +32,20 @@ var timerControl = {
                 self.ticker.minutes();
                 self.ticker.seconds();
                 PubSub.publish('timeLimitReached');
-
             }
             m.redraw()
         }, 1000)
-
-
     },
 
-    clear: function () {
-      clearInterval(this.timerId)
-    },
-    controller: function () {
-
+    reset: function () {
+        this.ticker.minutes("00");
+        this.ticker.seconds("00");
+      clearInterval(this.interval)
     },
 
     view: function (ctrl, QuenLayer, parent) {
 
         var self = this;
-
         return m('div', self.ticker.minutes() + ":" + self.ticker.seconds())
     }
 };
