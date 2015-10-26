@@ -35,12 +35,16 @@ var QuenLayer = {
         if (self.config[t] && parent.state.playing != false && !self.config[t].seen) {
             QuenLayer.parent.playIt();
             self.question(self.config[t].question);
-            console.log(self.config[t].answers)
-            self.config[t].answers.map(function (ans, idx) {
 
-                self.answers[idx] = ans
-            });
-            console.log(self.answers[0]);
+            console.log(self.config[t].answers);
+            //iterate through the answers in the config object
+            for (var timeId in self.config[t].answers[0]) {
+                console.log(timeId,self.config[t].answers[0][timeId])
+
+
+            }
+
+
             self.config[t].seen = true;
             m.redraw()
         }
@@ -55,11 +59,7 @@ var QuenLayer = {
     view: function (ctrl, parent) {
         this.parent = parent;
         var self = this;
-        return m('div', self.question(), m('div',
-            self.answers.map(function (ans, idx) {
-
-                console.log(ans)
-
-            })))
+        return m('div', self.question(), m('div', self.answers
+        ))
     }
 };
