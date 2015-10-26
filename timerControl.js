@@ -28,7 +28,7 @@ var timerControl = {
                  * my be used to subscribe to a function from
                  * anywhere.
                  */
-                clearInterval(t);
+                clearInterval(self.interval);
                 self.ticker.minutes();
                 self.ticker.seconds();
                 PubSub.publish('timeLimitReached');
@@ -43,9 +43,8 @@ var timerControl = {
       clearInterval(this.interval)
     },
 
-    view: function (ctrl, QuenLayer, parent) {
+    view: function () {
 
-        var self = this;
-        return m('div', self.ticker.minutes() + ":" + self.ticker.seconds())
+        return m('div', this.ticker.minutes() + ":" + this.ticker.seconds())
     }
 };
