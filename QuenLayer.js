@@ -14,7 +14,7 @@ var QuenLayer = {
             }],
             correct: 1
         },
-        4: {
+        3: {
             question: 'where is this?',
             answers: [{
                 1: 'me',
@@ -27,11 +27,14 @@ var QuenLayer = {
 
     question: m.prop(),
     answers: m.prop([]),
+    time: 0,
 
-    questionCheck: function (time, parent) {
+    getQuestion: function (time, parent) {
 
         var self = this,
             t = Math.round(time);
+
+        self.time = t;
 
         if (self.config[t] && parent.state.playing != false && !self.config[t].seen) {
             QuenLayer.parent.playIt();
@@ -44,15 +47,30 @@ var QuenLayer = {
             }
 
             self.config[t].seen = true;
-            m.redraw()
+
         }
     },
 
+    checkAnswer: function (ans) {
+        var answerClicked = ans,
+            self = this,
+            answerId = parseInt(answerClicked.getAttribute('answerId')),
+            correctAnswer = self.config[self.time].correct;
+        if (answerId == correctAnswer) {
+            console.log('hoooooray')
+        }else{
+            console.log('wrong answer')
+        }
+
+    }
+    ,
+
     controller: function (parent) {
         PubSub.subscribe('timeChange', function (time) {
-            QuenLayer.questionCheck(time, parent)
+            QuenLayer.getQuestion(time, parent)
         });
-    },
+    }
+    ,
 
     view: function (ctrl, parent) {
         this.parent = parent;
@@ -61,8 +79,8 @@ var QuenLayer = {
                 return m('div', {
                     answerId: idx,
                     onclick: function () {
-                        var self = this;
-                        console.log(self.getAttribute('answerId'))
+                        var answerClicked = this;
+                        self.checkAnswer(answerClicked)
                     }
                 }, answer)
             })
