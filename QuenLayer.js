@@ -13,30 +13,31 @@ var QuenLayer = {
     config: {
         2: {
             question: 'who is this?',
-            answers: [{
+            answers: {
                 0: 'pharzan',
                 1: 'you',
                 2: 'Big Bunny',
                 3: 'little Bunny'
-            }],
-            correct: 1
+            },
+            correct: 1,
+            timeLimit: 5000
         },
         3: {
             question: 'where is this?',
-            answers: [{
+            answers: {
                 0: 'me',
                 1: '***',
                 2: 'Bunny'
-            }],
+            },
             correct: 1
         },
         6: {
             question: 'who are you?',
-            answers: [{
+            answers: {
                 0: 'not you',
                 1: 'probably you'
 
-            }],
+            },
             correct: 0
         }
     },
@@ -47,20 +48,20 @@ var QuenLayer = {
 
     getQuestion: function (time, parent) {
 
+
         var self = this,
             t = Math.round(time);
-
         self.time = t;
-        console.log(self.answers(), time);
-
-        if (self.config[t] && parent.state.playing != false && !self.config[t].seen) {
-            QuenLayer.parent.playIt();
+        console.log(self.config)
+        // console.log(self.answers(), time);
+        if (self.config[t] && parent.state.playing && !self.config[t].seen) {
+            parent.playIt();
             self.question(self.config[t].question);
 
             //iterate through the answers in the config object
-            for (var ansNumber in self.config[t].answers[0]) {
-                self.answers().push(self.config[t].answers[0][ansNumber])
-            }
+            /* for (var ansNumber in self.config[t].answers) {
+             self.answers().push(self.config[t].answers[ansNumber])
+             }*/
             self.config[t].seen = true;
         }
     },
@@ -86,7 +87,7 @@ var QuenLayer = {
     },
 
     clearContinue: function () {
-      var self=this;
+        var self = this;
         self.answers([]);
         self.question('');
         self.parent.playIt();
@@ -100,15 +101,23 @@ var QuenLayer = {
 
     view: function (ctrl, parent) {
         this.parent = parent;
-        var self = this;
-        return m('div', self.question(), m('div', self.answers().map(function (answer, idx) {
+        var self = this,
+            q = self.question();
+
+        if (!q) {
+            return m('')
+        }
+
+        var    answers=self.config[self.time].answers;
+        return m('div', self.question(), m('div', Object.keys(answers).map(function (key, idx) {
                 return m('div', {
-                    answerId: idx,
+                    answerId: key,
                     onclick: function () {
                         var answerClicked = this;
+                        console.log(answers);
                         self.checkAnswer(answerClicked)
                     }
-                }, answer)
+                }, answers[key])
             })
         ))
     }
